@@ -35,7 +35,9 @@ data class Recipe(var id: Int, var name: String,
     }
 
     fun setRating(rate: Int?) {
-        this.rating = rate
+        if (isValidRating(rate)) {
+            this.rating = rate
+        }
     }
 
     fun getRating(): Int? {
@@ -166,9 +168,9 @@ data class Recipe(var id: Int, var name: String,
         return true;
     }
 
-    fun isValidRating(rating: Double?): Boolean {
+    fun isValidRating(rating: Int?): Boolean {
         if (rating != null) {
-            if (rating > 0.0 || rating < 10.0) {
+            if (rating > 0 && rating < 10) {
                 return true
             }
         }
