@@ -38,11 +38,8 @@ class RecipeManager {
         }
     }
 
-    fun getRecipe(id: Int): Recipe? {
-        if (recipes.contains(id)) {
-            return recipes[id]
-        }
-        return null
+    fun getRecipe(id: Int): Recipe {
+        return recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
     }
 
     fun getRecipeCount(): Int {
@@ -102,4 +99,13 @@ class RecipeManager {
             return
         }
     }
+
+    fun getIngredient(id: Int) : Ingredient? {
+        return ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
+    }
+
+    fun getAllIngredients() : List<Ingredient> {
+        return ingredients.values.toList()
+    }
+
 }
