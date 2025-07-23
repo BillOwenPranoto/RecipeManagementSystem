@@ -2,6 +2,7 @@ package classes
 
 import enums.Cuisine
 import enums.Difficulty
+import enums.IngredientCategory
 
 class RecipeManager {
     val recipes: MutableMap<Int, Recipe> = mutableMapOf()
@@ -12,7 +13,7 @@ class RecipeManager {
 
     fun addRecipe(recipe: Recipe) {
         if (recipe !in recipes.values) {
-            recipes.put(nextRecipeId, recipe)
+            recipes.put(this.getRecipeNextId(), recipe)
             nextRecipeId++
         } else {
             println("Recipe already exists!")
@@ -78,7 +79,7 @@ class RecipeManager {
     }
 
     fun addIngredient(ingredient: Ingredient) {
-        ingredients.put(nextIngredientId, ingredient)
+        ingredients.put(this.getNextIngredientId(), ingredient)
         nextIngredientId++
     }
 
@@ -104,8 +105,22 @@ class RecipeManager {
         return ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
     }
 
-    fun getAllIngredients() : List<Ingredient> {
-        return ingredients.values.toList()
-    }
+    fun getAllIngredients() : List<Ingredient> =
+         ingredients.values.toList()
+
+
+    fun getNextIngredientId() : Int  =
+        nextIngredientId
+
+    fun getIngredientCount() : Int =
+        ingredients.size
+
+    fun searchIngredient(name: String): List<Ingredient> =
+        ingredients.filterValues { it.name.equals(name,ignoreCase = true) }.values.toList()
+
+
+    fun getIngredientsByCategory(category: IngredientCategory): List<Ingredient> =
+        ingredients.filterValues { it.getCategory() == category }.values.toList()
+
 
 }
