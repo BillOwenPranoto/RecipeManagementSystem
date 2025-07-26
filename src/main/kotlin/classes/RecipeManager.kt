@@ -39,44 +39,44 @@ class RecipeManager {
         }
     }
 
-    fun getRecipe(id: Int): Recipe {
-        return recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
-    }
+    fun getRecipe(id: Int): Recipe =
+         recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
 
-    fun getRecipeCount(): Int {
-        return recipes.size
-    }
 
-    fun getRecipeNextId(): Int {
-        return nextRecipeId
-    }
+    fun getRecipeCount(): Int =
+         recipes.size
 
-    fun getAllRecipes(): List<Recipe> {
-        return recipes.values.toList()
-    }
 
-    fun searchRecipesByName(name: String): List<Recipe> {
-       return recipes.filterValues {it.name.equals(name,ignoreCase = true) }.values.toList()
-    }
+    fun getRecipeNextId(): Int =
+         nextRecipeId
 
-    fun searchRecipesByIngredient(byIngredient: Ingredient): List<Recipe> {
-       return recipes.filterValues { it.ingredients == byIngredient }.values.toList()
-    }
+
+    fun getAllRecipes(): List<Recipe> =
+         recipes.values.toList()
+
+
+    fun searchRecipesByName(name: String): List<Recipe> =
+        recipes.values.filter {it.name.equals(name,ignoreCase = true) }.toList()
+
+
+    fun searchRecipesByIngredient(byIngredient: Ingredient): List<Recipe> =
+        recipes.values.filter { it.ingredients == byIngredient }.toList()
+
 
     fun getRecipesByTag(byTag: String): List<Recipe> =
         recipes.values.filter { it.tags.contains(byTag) }
 
-    fun filterRecipeByDifficulty(difficulty: Difficulty) : List<Recipe> {
-        return recipes.filterValues { it.getDifficulty() == difficulty }.values.toList()
-    }
+    fun filterRecipeByDifficulty(difficulty: Difficulty) : List<Recipe> =
+         recipes.values.filter { it.getDifficulty() == difficulty }.toList()
 
-    fun filterRecipeByCuisine(cuisine: Cuisine) : List<Recipe> {
-        return recipes.filterValues { it.getCuisine() == cuisine }.values.toList()
-    }
 
-    fun filterRecipeByRating(rating: Int) : List<Recipe> {
-        return recipes.filterValues {it.getRating() == rating}.values.toList()
-    }
+    fun filterRecipeByCuisine(cuisine: Cuisine) : List<Recipe> =
+         recipes.values.filter { it.getCuisine() == cuisine }.toList()
+
+
+    fun filterRecipeByRating(rating: Int) : List<Recipe> =
+         recipes.values.filter {it.getRating() == rating}.toList()
+
 
     fun addIngredient(ingredient: Ingredient) {
         ingredients.put(this.getNextIngredientId(), ingredient)
@@ -101,9 +101,9 @@ class RecipeManager {
         }
     }
 
-    fun getIngredient(id: Int) : Ingredient? {
-        return ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
-    }
+    fun getIngredient(id: Int) : Ingredient? =
+         ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
+
 
     fun getAllIngredients() : List<Ingredient> =
          ingredients.values.toList()
@@ -116,11 +116,23 @@ class RecipeManager {
         ingredients.size
 
     fun searchIngredient(name: String): List<Ingredient> =
-        ingredients.filterValues { it.name.equals(name,ignoreCase = true) }.values.toList()
-
+        ingredients.values.filter { it.name.equals(name,ignoreCase = true) }.toList()
 
     fun getIngredientsByCategory(category: IngredientCategory): List<Ingredient> =
-        ingredients.filterValues { it.getCategory() == category }.values.toList()
+        ingredients.values.filter { it.getCategory() == category }.toList()
 
+    fun handleUserInput(input: String) {
 
+    }
+
+    fun showMenu() {
+        println("====================================")
+        println("Welcome to Recipe Manager! What can I do for you? ")
+        println("1. Create a recipe.")
+        println("2. Update a recipe.")
+    }
+
+    fun run() {
+
+    }
 }
