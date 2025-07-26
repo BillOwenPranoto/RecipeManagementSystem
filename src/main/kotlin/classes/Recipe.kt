@@ -45,7 +45,7 @@ data class Recipe(var id: Int, var name: String,
     }
 
     fun setNotes(notes: String?) {
-        this.notes = notes
+        this.notes = notes?.trim()
     }
 
     fun getNotes() : String? {
@@ -92,7 +92,7 @@ data class Recipe(var id: Int, var name: String,
             return this
         }
 
-        return copy(_instructions = _instructions + instruction)
+        return copy(_instructions = _instructions + instruction.trim())
     }
 
     fun updateInstruction(instructionId: Int, updated: String): Recipe {
@@ -108,20 +108,20 @@ data class Recipe(var id: Int, var name: String,
     }
 
     fun hasTag(tag: String) : Boolean {
-        return _tags.contains(tag)
+        return _tags.contains(tag.trim())
     }
 
     fun addTag(tag: String): Recipe {
-        if(this.hasTag(tag)) {
+        if(this.hasTag(tag.trim())) {
             println("Recipe has already been tagged with this!")
             return this
         }
 
-        return copy(_tags = _tags + tag)
+        return copy(_tags = _tags + tag.trim())
     }
 
     fun removeTag(tag: String): Recipe {
-        return copy(_tags = _tags-tag)
+        return copy(_tags = _tags-tag.trim())
     }
 
     fun isQuickMeal(): Boolean {

@@ -15,7 +15,7 @@ data class RecipeIngredient(val ingredient: Ingredient, val amount: Double,
     }
 
     fun setNotes(note: String) {
-         notes += note
+         notes += note.trim()
     }
 
     fun getNotes() : String? {
