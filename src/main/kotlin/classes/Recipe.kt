@@ -9,8 +9,13 @@ data class Recipe(var id: Int, var name: String,
              private val _ingredients: List<RecipeIngredient> = emptyList(),
              private val _instructions: List<String> = emptyList(),
              private val _tags: Set<String> = emptySet(),
-             var difficulty: Difficulty = Difficulty.UNSPECIFIED,
-             var cuisine: Cuisine = Cuisine.UNKNOWN) {
+             var difficulty: Difficulty,
+             var cuisine: Cuisine)
+ {
+     init {
+         require(!(name.isEmpty() || name.isBlank())) { "Name can't be empty!"}
+         require(servings > 0 && prepTimeMinutes > 0 && cookTimeMinutes > 0) {"Servings/Preparation Time/Cooking Time must be greater than 0!"}
+     }
 
     val totalTimeMinutes:Int = prepTimeMinutes + cookTimeMinutes
 
