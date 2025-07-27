@@ -1,9 +1,8 @@
 package utilities
 
 import enums.MeasurementUnit
-import enums.UnitCategory
 
-object UnitCoverter {
+object UnitConverter {
 
     fun convert(
         amount: Double,
