@@ -14,7 +14,7 @@ data class Recipe(var id: Int, var name: String,
  {
      init {
          require(!(name.isEmpty() || name.isBlank())) { "Name can't be empty!"}
-         require(servings > 0 && prepTimeMinutes > 0 && cookTimeMinutes > 0) {"Servings/Preparation Time/Cooking Time must be greater than 0!"}
+         require(servings > 0 && prepTimeMinutes in 0..600 && cookTimeMinutes in 0..1440) {"Servings/Preparation Time/Cooking Time must be greater than 0!"}
      }
 
     val totalTimeMinutes:Int = prepTimeMinutes + cookTimeMinutes
@@ -181,5 +181,13 @@ data class Recipe(var id: Int, var name: String,
         }
         return false
     }
+
+     fun isValidCookingTime(time: Int): Boolean {
+         return time in 0..1440
+     }
+
+     fun isValidPrepTime(time: Int): Boolean {
+         return time in 0..600
+     }
 
 }
