@@ -5,9 +5,6 @@ import enums.IngredientCategory
 data class ShoppingList(val items: MutableList<ShoppingItem> = mutableListOf(),
                     val groupedByCategory: Map<IngredientCategory, List<ShoppingItem>> = mutableMapOf()) {
 
-    fun getItems() : List<ShoppingItem> =
-        items
-
     fun getTotalItems() : Int =
         groupedByCategory.values.sumOf { it.size }
 

@@ -23,60 +23,6 @@ data class Recipe(var id: Int, var name: String,
     val instructions: List<String> get() = _instructions
     val tags: Set<String> get() = _tags
 
-    fun getName(): String {
-        return "Recipe's name: $name";
-    }
-
-    fun getDescription(): String{
-        return description;
-    }
-
-    fun getServings(): Int {
-        return servings;
-    }
-
-    fun getId(): Int {
-        return id;
-    }
-
-    fun setRating(rate: Int?) {
-        if (isValidRating(rate)) {
-            this.rating = rate
-        }
-    }
-
-    fun getRating(): Int? {
-        return rating
-    }
-
-    fun setNotes(notes: String?) {
-        this.notes = notes?.trim()
-    }
-
-    fun getNotes() : String? {
-        return notes
-    }
-
-    fun setDifficulty(difficulty: Difficulty) {
-        this.difficulty = difficulty
-    }
-
-    fun getDifficulty(): Difficulty {
-        return difficulty
-    }
-
-    fun setCuisine(cuisine: Cuisine) {
-        this.cuisine = cuisine
-    }
-
-    fun getCuisine() : Cuisine {
-        return cuisine
-    }
-
-    fun getTotalTimeMinutes(): Int {
-        return totalTimeMinutes
-    }
-
     fun addIngredient(ingredient: RecipeIngredient): Recipe {
 
         if(_ingredients.contains(ingredient)) {
@@ -130,7 +76,7 @@ data class Recipe(var id: Int, var name: String,
     }
 
     fun isQuickMeal(): Boolean {
-        if (getTotalTimeMinutes() < 20) {
+        if (this.totalTimeMinutes < 20) {
             return true;
         } else {
             return false;
@@ -146,7 +92,7 @@ data class Recipe(var id: Int, var name: String,
         )
 
         for (recipe : RecipeIngredient in _ingredients) {
-            if (recipe.ingredient.getCategory() in nonVegetarianCategories) {
+            if (recipe.ingredient.category in nonVegetarianCategories) {
                 return false
             }
         }
@@ -165,7 +111,7 @@ data class Recipe(var id: Int, var name: String,
         )
 
         for (recipe : RecipeIngredient in _ingredients) {
-            if(recipe.ingredient.getCategory() in nonVeganCategories) {
+            if(recipe.ingredient.category in nonVeganCategories) {
                 return false;
             }
         }
