@@ -58,7 +58,6 @@ class RecipeManager {
     fun searchRecipesByName(name: String): List<Recipe> =
         recipes.values.filter {it.name.equals(name,ignoreCase = true) }.toList()
 
-
 //    fun searchRecipesByIngredient(byIngredient: Ingredient): List<Recipe> =
 //        recipes.values.filter { it.ingredients == byIngredient }.toList()
 
@@ -103,7 +102,6 @@ class RecipeManager {
     fun getIngredient(id: Int) : Ingredient? =
          ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
 
-
     fun getAllIngredients() : List<Ingredient> =
          ingredients.values.toList()
 
@@ -116,13 +114,26 @@ class RecipeManager {
     fun getIngredientsByCategory(category: IngredientCategory): List<Ingredient> =
         ingredients.values.filter { it.category == category }.toList()
 
-    fun handleUserInput(input: String) {
+    fun handleUserInput(input: Int?) {
 
+        when(input) {
+            1 -> handleAddRecipe()
+        }
+    }
+
+    fun handleAddRecipe()  {
+        println("---------------------------------")
+        println("Please fill in the recipe details below!")
+        print("Recipe's name: ")
+
+        val recipeName = readLine().toString().trim()
+
+        print("\nRecipe's ")
     }
 
     fun showMenu() {
 
-        println("====================================")
+        println("\n====================================")
         println("1. Create a recipe.")
         println("2. Update a recipe.")
         println("3. Search for a specific recipe.")
@@ -134,21 +145,24 @@ class RecipeManager {
 
     fun run() {
 
-        println("Welcome to Recipe Manager! What can I do for you? ")
+        println("\nWelcome to Recipe Manager! What can I do for you? ")
 
         inputLoop@ while(true) {
             showMenu()
-            val userInput = readLine().toString().trim()
+            val userInput = readLine()?.toIntOrNull()
 
             when (userInput) {
-                "6" -> break@inputLoop
-                "" -> continue@inputLoop
+                null -> {
+                    println("\nInput can't be null. Please re-enter!")
+                    continue@inputLoop
+                }
+                in 1..5 -> handleUserInput(userInput)
+                6 -> break@inputLoop
                 else -> {
-                    handleUserInput(userInput)
+                    println("\nNumber entered invalid. Please enter a valid one!")
+                    continue@inputLoop
                 }
             }
         }
-
-
     }
 }
