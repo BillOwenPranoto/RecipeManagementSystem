@@ -27,6 +27,7 @@ object ConsolePrompter {
         val enumValues = enumValues<T>()
         println(prompt)
         enumValues.forEach { println("- ${it.name}") }
+        print("Enter your response: ")
         while (true) {
             val input = readLine()?.trim()?.uppercase()
             enumValues.find { it.name == input }?.let { return it }
