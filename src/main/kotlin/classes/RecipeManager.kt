@@ -3,13 +3,17 @@ package classes
 import enums.Cuisine
 import enums.Difficulty
 import enums.IngredientCategory
+import enums.MeasurementUnit
+import utilities.ConsolePrompter
 
 class RecipeManager {
     val recipes: MutableMap<Int, Recipe> = mutableMapOf()
+    val recipeIngredients: MutableMap<Int, RecipeIngredient> = mutableMapOf()
     val ingredients: MutableMap<Int, Ingredient> = mutableMapOf()
 
     var nextRecipeId = 1
     var nextIngredientId = 1
+    var nextRecipeIngredientId = 1
 
     fun addRecipe(recipe: Recipe) {
         if (recipe !in recipes.values) {
@@ -114,26 +118,77 @@ class RecipeManager {
     fun getIngredientsByCategory(category: IngredientCategory): List<Ingredient> =
         ingredients.values.filter { it.category == category }.toList()
 
+    fun addRecipeIngredient(recipeIngredient: RecipeIngredient) {
+        recipeIngredients.put(nextRecipeIngredientId, recipeIngredient)
+        nextRecipeIngredientId++
+    }
+
     fun handleUserInput(input: Int?) {
 
         when(input) {
             1 -> handleAddRecipe()
+            2 -> handleUpdateRecipe()
+            4 -> handleViewCurrentRecipes()
         }
     }
 
     fun handleAddRecipe()  {
-        println("---------------------------------")
+        println("\n---------------------------------")
         println("Please fill in the recipe details below!")
-        print("Recipe's name: ")
 
-        val recipeName = readLine().toString().trim()
+        val name = ConsolePrompter.promptText("Enter the recipe's name: ")
+        val description = ConsolePrompter.promptText("Enter a brief description: ")
+        val servings = ConsolePrompter.promptInt("How many servings?: ")
+        val notes = ConsolePrompter.promptText("Any notes for this? (optional): ")
+        val difficulty = ConsolePrompter.promptEnum<Difficulty>("How would you rate this recipe's difficulty?\nHere's the list: ")
+        val cuisine = ConsolePrompter.promptEnum<Cuisine>("What cuisine would this menu be?\nHere's the list: ")
+        val prepTime = ConsolePrompter.promptInt("How long roughly will it take in minutes to prepare for the recipe?: ")
+        val cookTime = ConsolePrompter.promptInt("And how long will it take in minutes to cook?: ")
 
-        print("\nRecipe's ")
+        print("Let's fill in the ingredients. First, let us know how many ingredients needed for this recipe: " )
+        val numOfIngredient = readLine()?.toIntOrNull()
+
+        if (numOfIngredient != null) {
+           for (i in 0 until numOfIngredient) {
+               val ingredientName = ConsolePrompter.promptText("Fill in ingredient number ${i+1}: ")
+
+               println("\nHere's every possible category you can fill in for $ingredientName: ")
+               IngredientCategory.entries.forEachIndexed { index, category ->
+                   println("${index + 1}. ${category.name}")
+               }
+
+               val category = ConsolePrompter.promptEnum<IngredientCategory>("Fill in the category for this ingredient: ")
+               val amount = ConsolePrompter.promptDouble("Enter amount for this ingredient: ")
+               val unit = ConsolePrompter.promptEnum<MeasurementUnit>("Enter unit for this (grams/teaspoon/etc.): ")
+               val ingredientNotes = ConsolePrompter.promptText("Any notes for this ingredient? (optional): ")
+
+               val ingredient = Ingredient(nextIngredientId,ingredientName,category)
+               this.addIngredient(ingredient)
+
+               val recipeIngredient = RecipeIngredient(ingredient,amount,ingredientNotes,unit)
+               this.addRecipeIngredient(recipeIngredient)
+
+               val recipe = Recipe(nextRecipeId, name, description,servings,prepTime,cookTime,0,difficulty,
+                   cuisine,notes, recipeIngredients.values.toList())
+               this.addRecipe(recipe)
+
+               println("Recipe $name has been succesfully created!")
+           }
+        }
+
+    }
+
+    fun handleUpdateRecipe() {
+
+    }
+
+    fun handleViewCurrentRecipes() {
+
     }
 
     fun showMenu() {
 
-        println("\n====================================")
+        print("\n====================================")
         println("1. Create a recipe.")
         println("2. Update a recipe.")
         println("3. Search for a specific recipe.")
