@@ -129,6 +129,7 @@ class RecipeManager {
             1 -> handleAddRecipe()
             2 -> handleUpdateRecipe()
             4 -> handleViewCurrentRecipes()
+            5-> handleDeleteRecipe()
         }
     }
 
@@ -144,8 +145,10 @@ class RecipeManager {
         val cuisine = ConsolePrompter.promptEnum<Cuisine>("What cuisine would this menu be?\nHere's the list: ")
         val prepTime = ConsolePrompter.promptInt("How long roughly will it take in minutes to prepare for the recipe?: ")
         val cookTime = ConsolePrompter.promptInt("And how long will it take in minutes to cook?: ")
+        val rating = ConsolePrompter.promptOptionalInt("Lastly, how would you rate this recipe out of 10?: ")
 
-        print("Let's fill in the ingredients. First, let us know how many ingredients needed for this recipe: " )
+
+        print("\nLet's fill in the ingredients. First, let us know how many ingredients needed for this recipe: " )
         val numOfIngredient = readLine()?.toIntOrNull()
 
         if (numOfIngredient != null) {
@@ -158,7 +161,7 @@ class RecipeManager {
                }
 
                val category = ConsolePrompter.promptEnum<IngredientCategory>("Fill in the category for this ingredient: ")
-               val amount = ConsolePrompter.promptDouble("Enter amount for this ingredient: ")
+               val amount = ConsolePrompter.promptDouble("Enter amount for this ingredient (just the nominal, you'll be putting the unit after this): ")
                val unit = ConsolePrompter.promptEnum<MeasurementUnit>("Enter unit for this (grams/teaspoon/etc.): ")
                val ingredientNotes = ConsolePrompter.promptText("Any notes for this ingredient? (optional): ")
 
@@ -168,12 +171,12 @@ class RecipeManager {
                val recipeIngredient = RecipeIngredient(ingredient,amount,ingredientNotes,unit)
                this.addRecipeIngredient(recipeIngredient)
 
-               val recipe = Recipe(nextRecipeId, name, description,servings,prepTime,cookTime,0,difficulty,
-                   cuisine,notes, recipeIngredients.values.toList())
-               this.addRecipe(recipe)
-
-               println("Recipe $name has been succesfully created!")
            }
+            val recipe = Recipe(nextRecipeId, name, description,servings,prepTime,cookTime,rating,difficulty,
+                cuisine,notes, recipeIngredients.values.toList())
+            this.addRecipe(recipe)
+
+            println("Recipe $name has been successfully created!")
         }
 
     }
@@ -183,12 +186,21 @@ class RecipeManager {
     }
 
     fun handleViewCurrentRecipes() {
+        println("\nHere are your current recipes:")
+
+        recipes.entries.forEach { (id, recipe) ->
+            println("ID $id → ${recipe.name}")
+        }
+    }
+
+    fun handleDeleteRecipe() {
 
     }
 
+
     fun showMenu() {
 
-        print("\n====================================")
+        println("====================================")
         println("1. Create a recipe.")
         println("2. Update a recipe.")
         println("3. Search for a specific recipe.")
