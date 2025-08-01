@@ -5,12 +5,12 @@ import enums.IngredientCategory
 
 data class Recipe(var id: Int, var name: String,
              var description: String, val servings: Int, var prepTimeMinutes: Int,
-             var cookTimeMinutes: Int, var rating: Int?, var notes: String?,
-             private val _ingredients: List<RecipeIngredient> = emptyList(),
-             private val _instructions: List<String> = emptyList(),
-             private val _tags: Set<String> = emptySet(),
-             var difficulty: Difficulty,
-             var cuisine: Cuisine)
+             var cookTimeMinutes: Int, var rating: Int?, var difficulty: Difficulty,
+                  var cuisine: Cuisine, var notes: String?,
+                    private val _ingredients: List<RecipeIngredient> = emptyList(),
+                    private val _instructions: List<String> = emptyList(),
+                    private val _tags: Set<String> = emptySet(),
+             )
  {
      init {
          require(!(name.isEmpty() || name.isBlank())) { "Name can't be empty!"}
