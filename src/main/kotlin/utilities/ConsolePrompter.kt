@@ -18,7 +18,7 @@ object ConsolePrompter {
         }
     }
 
-    fun promptOptionalInt(prompt: Int) : Int? {
+    fun promptOptionalInt(prompt: String) : Int? {
         print(prompt)
         return readLine()?.trim()?.toInt()
     }
