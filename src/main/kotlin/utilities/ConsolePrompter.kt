@@ -20,7 +20,8 @@ object ConsolePrompter {
 
     fun promptOptionalInt(prompt: String) : Int? {
         print(prompt)
-        return readLine()?.trim()?.toInt()
+        val input =  readLine()?.trim()?.toInt()
+        return input ?: 0
     }
 
     inline fun <reified T: Enum<T>> promptEnum(prompt: String): T {
