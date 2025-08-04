@@ -62,22 +62,27 @@ class RecipeManager {
     fun searchRecipesByName(name: String): List<Recipe> =
         recipes.values.filter {it.name.equals(name,ignoreCase = true) }.toList()
 
-//    fun searchRecipesByIngredient(byIngredient: Ingredient): List<Recipe> =
-//        recipes.values.filter { it.ingredients == byIngredient }.toList()
+    fun searchRecipesByIngredientName(ingredientName: String): List<Recipe> {
+        return recipes.values.filter { recipe ->
+            recipe.ingredients.any {
+                it.ingredient.name.equals(ingredientName, ignoreCase = true)
+            }
+        }
+    }
 
     fun getRecipesByTag(byTag: String): List<Recipe> =
         recipes.values.filter { it.tags.contains(byTag) }
 
-    fun filterRecipeByDifficulty(difficulty: Difficulty) : List<Recipe> =
-         recipes.values.filter { it.difficulty == difficulty }.toList()
+    fun filterRecipeByDifficulty(difficulty: String) : List<Recipe> =
+         recipes.values.filter { it.difficulty.displayName().equals(difficulty, ignoreCase = true) }.toList()
 
 
-    fun filterRecipeByCuisine(cuisine: Cuisine) : List<Recipe> =
-         recipes.values.filter { it.cuisine == cuisine }.toList()
+    fun filterRecipeByCuisine(cuisine: String) : List<Recipe> =
+         recipes.values.filter { it.cuisine.displayName().equals(cuisine, ignoreCase = true) }.toList()
 
 
-    fun filterRecipeByRating(rating: Int) : List<Recipe> =
-         recipes.values.filter {it.rating == rating}.toList()
+    fun filterRecipeByRating(rating: String) : List<Recipe> =
+         recipes.values.filter {it.rating == rating.toInt()}.toList()
 
 
     fun addIngredient(ingredient: Ingredient) {
@@ -128,7 +133,10 @@ class RecipeManager {
         when(input) {
             1 -> handleAddRecipe()
             2 -> handleUpdateRecipe()
-            4 -> handleViewCurrentRecipes()
+            4 -> {
+                println("\nHere are your current recipes:")
+                handleViewCurrentRecipes()
+            }
             5-> handleDeleteRecipe()
         }
     }
@@ -186,15 +194,55 @@ class RecipeManager {
     }
 
     fun handleViewCurrentRecipes() {
-        println("\nHere are your current recipes:")
 
         recipes.entries.forEach { (id, recipe) ->
             println("ID $id → ${recipe.name}")
         }
     }
 
-    fun handleDeleteRecipe() {
+    fun handleSearchRecipe() {
+        println("How would you filter your search? ")
+        println("1. By name")
+        println("2. By ingredient")
+        println("3. By tag")
+        println("4. By difficulty")
+        println("5. By cuisine")
+        println("6. By rating")
+        val choice = ConsolePrompter.promptInt("Enter your choice: ")
+        val keyword = ConsolePrompter.promptText("Enter the keyword here: ")
 
+        when (choice) {
+            1 -> searchRecipesByName(keyword)
+            2 -> searchRecipesByIngredientName(keyword)
+            3 -> getRecipesByTag(keyword)
+            4 -> filterRecipeByDifficulty(keyword)
+            5 -> filterRecipeByCuisine(keyword)
+            6 -> filterRecipeByRating(keyword)
+        }
+    }
+
+    fun handleDeleteRecipe() {
+        if (recipes.isNotEmpty()) {
+            println("Here's the list of recipes currently saved. Let me know the number (id) of recipes you wish to remove!")
+            handleViewCurrentRecipes()
+
+            deleteLoop@ while(true) {
+                val idToRemove = ConsolePrompter.promptInt("Enter your id: ")
+
+                val reassure = ConsolePrompter.promptYesOrNo("Are you sure you'd like to delete this recipe?: (Y/N)")
+
+                if (reassure) {
+                    deleteRecipe(idToRemove)
+                    break@deleteLoop
+                } else {
+                    continue@deleteLoop
+                }
+            }
+        }
+        else {
+            println("There is no recipe stored currently in my list! Please make a new one!")
+            return
+        }
     }
 
 
@@ -203,7 +251,7 @@ class RecipeManager {
         println("====================================")
         println("1. Create a recipe.")
         println("2. Update a recipe.")
-        println("3. Search for a specific recipe.")
+        println("3. Search for a specific recipe (by filtering).")
         println("4. View all recipes in my list.")
         println("5. Delete a recipe.")
         println("6. Exit")
