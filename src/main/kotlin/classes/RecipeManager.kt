@@ -8,12 +8,10 @@ import utilities.ConsolePrompter
 
 class RecipeManager {
     val recipes: MutableMap<Int, Recipe> = mutableMapOf()
-    val recipeIngredients: MutableMap<Int, RecipeIngredient> = mutableMapOf()
     val ingredients: MutableMap<Int, Ingredient> = mutableMapOf()
 
     var nextRecipeId = 1
     var nextIngredientId = 1
-    var nextRecipeIngredientId = 1
 
     fun addRecipe(recipe: Recipe) {
         if (recipe !in recipes.values) {
@@ -44,23 +42,23 @@ class RecipeManager {
     }
 
     fun getRecipe(id: Int): Recipe =
-         recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
+        recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
 
 
     fun getRecipeCount(): Int =
-         recipes.size
+        recipes.size
 
 
     fun getRecipeNextId(): Int =
-         nextRecipeId
+        nextRecipeId
 
 
     fun getAllRecipes(): List<Recipe> =
-         recipes.values.toList()
+        recipes.values.toList()
 
 
     fun searchRecipesByName(name: String): List<Recipe> =
-        recipes.values.filter {it.name.equals(name,ignoreCase = true) }.toList()
+        recipes.values.filter { it.name.equals(name, ignoreCase = true) }.toList()
 
     fun searchRecipesByIngredientName(ingredientName: String): List<Recipe> {
         return recipes.values.filter { recipe ->
@@ -73,16 +71,16 @@ class RecipeManager {
     fun getRecipesByTag(byTag: String): List<Recipe> =
         recipes.values.filter { it.tags.contains(byTag) }
 
-    fun filterRecipeByDifficulty(difficulty: String) : List<Recipe> =
-         recipes.values.filter { it.difficulty.displayName().equals(difficulty, ignoreCase = true) }.toList()
+    fun filterRecipeByDifficulty(difficulty: String): List<Recipe> =
+        recipes.values.filter { it.difficulty.displayName().equals(difficulty, ignoreCase = true) }.toList()
 
 
-    fun filterRecipeByCuisine(cuisine: String) : List<Recipe> =
-         recipes.values.filter { it.cuisine.displayName().equals(cuisine, ignoreCase = true) }.toList()
+    fun filterRecipeByCuisine(cuisine: String): List<Recipe> =
+        recipes.values.filter { it.cuisine.displayName().equals(cuisine, ignoreCase = true) }.toList()
 
 
-    fun filterRecipeByRating(rating: String) : List<Recipe> =
-         recipes.values.filter {it.rating == rating.toInt()}.toList()
+    fun filterRecipeByRating(rating: String): List<Recipe> =
+        recipes.values.filter { it.rating == rating.toInt() }.toList()
 
 
     fun addIngredient(ingredient: Ingredient) {
@@ -108,24 +106,29 @@ class RecipeManager {
         }
     }
 
-    fun getIngredient(id: Int) : Ingredient? =
-         ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
+    fun getIngredient(id: Int): Ingredient? =
+        ingredients[id] ?: throw NoSuchElementException("No ingredients with such ID: $id")
 
-    fun getAllIngredients() : List<Ingredient> =
-         ingredients.values.toList()
+    fun getAllIngredients(): List<Ingredient> =
+        ingredients.values.toList()
 
-    fun getIngredientCount() : Int =
+    fun getIngredientCount(): Int =
         ingredients.size
 
     fun searchIngredient(name: String): List<Ingredient> =
-        ingredients.values.filter { it.name.equals(name,ignoreCase = true) }.toList()
+        ingredients.values.filter { it.name.equals(name, ignoreCase = true) }.toList()
 
     fun getIngredientsByCategory(category: IngredientCategory): List<Ingredient> =
         ingredients.values.filter { it.category == category }.toList()
 
-    fun addRecipeIngredient(recipeIngredient: RecipeIngredient) {
-        recipeIngredients.put(nextRecipeIngredientId, recipeIngredient)
-        nextRecipeIngredientId++
+    fun formatFilteredList(filtered: List<Recipe>): String {
+        val sb = StringBuilder()
+
+        sb.append("Found ${filtered.size} recipes: \n")
+        filtered.forEachIndexed { i, recipe ->
+            sb.append("${i + 1}. ${recipe.name}\n")
+        }
+        return sb.toString()
     }
 
     fun handleUserInput(input: Int?) {
@@ -133,6 +136,7 @@ class RecipeManager {
         when(input) {
             1 -> handleAddRecipe()
             2 -> handleUpdateRecipe()
+            3 -> handleSearchRecipe()
             4 -> {
                 println("\nHere are your current recipes:")
                 handleViewCurrentRecipes()
@@ -159,6 +163,8 @@ class RecipeManager {
         print("\nLet's fill in the ingredients. First, let us know how many ingredients needed for this recipe: " )
         val numOfIngredient = readLine()?.toIntOrNull()
 
+        val currentRecipeIngredients = mutableListOf<RecipeIngredient>()
+
         if (numOfIngredient != null) {
            for (i in 0 until numOfIngredient) {
                val ingredientName = ConsolePrompter.promptText("Fill in ingredient number ${i+1}: ")
@@ -177,11 +183,11 @@ class RecipeManager {
                this.addIngredient(ingredient)
 
                val recipeIngredient = RecipeIngredient(ingredient,amount,ingredientNotes,unit)
-               this.addRecipeIngredient(recipeIngredient)
+               currentRecipeIngredients.add(recipeIngredient)
 
            }
             val recipe = Recipe(nextRecipeId, name, description,servings,prepTime,cookTime,rating,difficulty,
-                cuisine,notes, recipeIngredients.values.toList())
+                cuisine,notes, currentRecipeIngredients)
             this.addRecipe(recipe)
 
             println("Recipe $name has been successfully created!")
@@ -212,12 +218,66 @@ class RecipeManager {
         val keyword = ConsolePrompter.promptText("Enter the keyword here: ")
 
         when (choice) {
-            1 -> searchRecipesByName(keyword)
-            2 -> searchRecipesByIngredientName(keyword)
-            3 -> getRecipesByTag(keyword)
-            4 -> filterRecipeByDifficulty(keyword)
-            5 -> filterRecipeByCuisine(keyword)
-            6 -> filterRecipeByRating(keyword)
+            1 -> {
+                val filteredList = searchRecipesByName(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
+            2 -> {
+                val filteredList = searchRecipesByIngredientName(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
+            3 -> {
+                val filteredList = getRecipesByTag(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
+            4 -> {
+                val filteredList = filterRecipeByDifficulty(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
+            5 -> {
+                val filteredList = filterRecipeByCuisine(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
+            6 -> {
+                val filteredList = filterRecipeByRating(keyword)
+
+                if (filteredList.isEmpty()) {
+                    println("No recipe has the keyword \"$keyword\".")
+                }
+                else {
+                    println(formatFilteredList(filteredList))
+                }
+            }
         }
     }
 
@@ -240,11 +300,10 @@ class RecipeManager {
             }
         }
         else {
-            println("There is no recipe stored currently in my list! Please make a new one!")
+            println("There is no recipe stored currently in the list! Please make a new one!")
             return
         }
     }
-
 
     fun showMenu() {
 
