@@ -136,4 +136,37 @@ data class Recipe(var id: Int, var name: String,
          return time in 0..600
      }
 
+     override fun toString(): String {
+         val sb = StringBuilder()
+
+         sb.appendLine("Recipe: $name")
+         sb.appendLine("ID: $id")
+         sb.appendLine("Description: $description")
+         sb.appendLine("Servings: $servings")
+         sb.appendLine("Prep Time: $prepTimeMinutes minutes")
+         sb.appendLine("Cook Time: $cookTimeMinutes minutes")
+         sb.appendLine("Rating: ${rating ?: "N/A"}")
+         sb.appendLine("Cuisine: $cuisine")
+         sb.appendLine("Difficulty: $difficulty")
+
+         sb.appendLine("\nIngredients:")
+         _ingredients.forEachIndexed { index, ingredient ->
+             sb.appendLine("  ${index + 1}. $ingredient")
+         }
+
+         sb.appendLine("\nInstructions:")
+         _instructions.forEachIndexed { index, step ->
+             sb.appendLine("  Step ${index + 1}: $step")
+         }
+
+         if (_tags.isNotEmpty()) {
+             sb.appendLine("\nTags: ${_tags.joinToString(", ")}")
+         }
+
+         if (!notes.isNullOrBlank()) {
+             sb.appendLine("\nNotes: $notes")
+         }
+
+         return sb.toString()
+     }
 }
