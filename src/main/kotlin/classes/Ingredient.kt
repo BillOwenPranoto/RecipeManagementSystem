@@ -4,9 +4,6 @@ import enums.IngredientCategory
 
 data class Ingredient(val id:Int, val name: String, val category: IngredientCategory) {
 
-//    fun getCategory(): IngredientCategory =
-//         category
-
     fun isVegetarianFriendly(): Boolean {
         val nonVegetarianCategories = setOf(
             IngredientCategory.MEAT,
