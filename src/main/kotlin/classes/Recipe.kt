@@ -75,6 +75,57 @@ data class Recipe(var id: Int, var name: String,
         return copy(_tags = _tags-tag.trim())
     }
 
+     fun setPrepTime(time: Int) {
+         if (isValidPrepTime(time)) {
+             this.prepTimeMinutes = time
+         } else {
+             println("Invalid prep time, must be less than 600 minutes!")
+         }
+     }
+
+     fun setPrepTime(time: String) {
+         val castToInt = time.toIntOrNull() ?: return
+         if (isValidPrepTime(castToInt)) {
+             this.prepTimeMinutes = castToInt
+         } else {
+             println("Invalid prep time, must be less than 600 minutes!")
+         }
+     }
+
+     fun setCookingTime(time: Int) {
+         if (isValidCookingTime(time)) {
+             this.cookTimeMinutes = time
+         } else {
+             println("Invalid cooking time, must be less than a day! (1440 minutes)")
+         }
+     }
+
+     fun setCookingTime(time: String) {
+         val castToInt = time.toIntOrNull() ?: return
+         if (isValidPrepTime(castToInt)) {
+             this.cookTimeMinutes = castToInt
+         } else {
+             println("Invalid cooking time, must be less than a day! (1440 minutes)")
+         }
+     }
+
+     fun setRating(rating: String) {
+         val castToInt = rating.toIntOrNull() ?: return
+         if (isValidRating(castToInt)) {
+             this.rating = castToInt
+         } else {
+             println("Invalid rating, must be between 0 to 10!")
+         }
+     }
+
+     fun setRating(rating: Int) {
+         if (isValidRating(rating)) {
+             this.rating = rating
+         } else {
+             println("Invalid rating, must be between 0 to 10!")
+         }
+     }
+
     fun isQuickMeal(): Boolean {
         if (this.totalTimeMinutes < 20) {
             return true;
