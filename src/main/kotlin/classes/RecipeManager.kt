@@ -32,6 +32,21 @@ class RecipeManager {
         }
     }
 
+    fun updateRecipe(id: Int, field: Int, updatedValue: String) {
+        val recipe = recipes[id] ?: return
+
+        when (field) {
+            1 -> recipe.name = updatedValue
+            2 -> recipe.description = updatedValue
+            3 -> recipe.servings = updatedValue.toIntOrNull() ?: recipe.servings
+            4 -> recipe.prepTimeMinutes = updatedValue.toIntOrNull() ?: recipe.prepTimeMinutes
+            5 -> recipe.cookTimeMinutes = updatedValue.toIntOrNull() ?: recipe.cookTimeMinutes
+            6 -> recipe.rating = updatedValue.toIntOrNull() ?: recipe.rating
+            7 -> recipe.cuisine = Cuisine.valueOf(updatedValue)
+            8 -> recipe.difficulty = Difficulty.valueOf(updatedValue)
+        }
+    }
+
     fun deleteRecipe(id: Int) {
         if (recipes.contains(id)) {
             recipes.remove(id)
@@ -197,6 +212,63 @@ class RecipeManager {
 
     fun handleUpdateRecipe() {
 
+        println("Current recipe in the list: ")
+        handleViewCurrentRecipes()
+        val idToUpdate = ConsolePrompter.promptInt("Look up the recipe here by typing the id: ")
+
+        if (recipes[idToUpdate] != null) {
+            println("Detailed description of recipe no. $idToUpdate")
+            println(recipes.values.toString())
+
+            println("Which detail would you like to update for this recipe? ")
+            println("1. Name")
+            println("2. Description")
+            println("3. Servings")
+            println("4. Prep Time")
+            println("5. Cooking Time")
+            println("6. Rating")
+            println("7. Cuisine")
+            println("8. Difficulty")
+
+            val answer = ConsolePrompter.promptInt("Enter your choice: ")
+
+            when (answer) {
+                1 -> {
+                    val newName = ConsolePrompter.promptText("Enter new name: ")
+                    updateRecipe(idToUpdate, 1, newName)
+                }
+                2 -> {
+                    val newDescription = ConsolePrompter.promptText("Enter new description: ")
+                    updateRecipe(idToUpdate, 2, newDescription)
+                }
+
+                3 -> {
+                    val newServings = ConsolePrompter.promptText("Enter new servings: ")
+                    updateRecipe(idToUpdate, 3, newServings)
+                }
+
+                4 -> {
+                    val newPrepTime = ConsolePrompter.promptText("Enter new prep time in minutes: ")
+                    updateRecipe(idToUpdate, 4, newPrepTime)
+                }
+
+                5 -> {
+                    val newCookTime = ConsolePrompter.promptText("Enter new cooking time in minutes: ")
+                    updateRecipe(idToUpdate, 5, newCookTime)
+                }
+
+                6 -> {
+                    val newRating = ConsolePrompter.promptText("Enter new rating: ")
+                    updateRecipe(idToUpdate, 6, newRating)
+                }
+
+                7 -> {
+                    val newCuisine = ConsolePrompter.promptEnum<Cuisine>("Enter new cuisine: ")
+                    updateRecipe(idToUpdate,7,newCuisine.name)
+                }
+
+            }
+        }
     }
 
     fun handleViewCurrentRecipes() {
