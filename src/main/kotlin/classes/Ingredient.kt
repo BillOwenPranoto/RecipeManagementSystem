@@ -27,4 +27,14 @@ data class Ingredient(val id:Int, val name: String, val category: IngredientCate
 
         return category !in nonVeganCategories
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+
+        sb.appendLine("Ingredient name: $name")
+        sb.appendLine("ID: $id")
+        sb.appendLine("Category: $category")
+
+        return sb.toString()
+    }
 }
