@@ -39,9 +39,9 @@ class RecipeManager {
             1 -> recipe.name = updatedValue
             2 -> recipe.description = updatedValue
             3 -> recipe.servings = updatedValue.toIntOrNull() ?: recipe.servings
-            4 -> recipe.prepTimeMinutes = updatedValue.toIntOrNull() ?: recipe.prepTimeMinutes
-            5 -> recipe.cookTimeMinutes = updatedValue.toIntOrNull() ?: recipe.cookTimeMinutes
-            6 -> recipe.rating = updatedValue.toIntOrNull() ?: recipe.rating
+            4 -> recipe.setPrepTime(updatedValue)
+            5 -> recipe.setCookingTime(updatedValue)
+            6 -> recipe.setRating(updatedValue)
             7 -> recipe.cuisine = Cuisine.valueOf(updatedValue)
             8 -> recipe.difficulty = Difficulty.valueOf(updatedValue)
         }
