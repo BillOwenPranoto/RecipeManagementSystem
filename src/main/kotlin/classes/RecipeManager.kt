@@ -218,7 +218,7 @@ class RecipeManager {
 
         if (recipes[idToUpdate] != null) {
             println("Detailed description of recipe no. $idToUpdate")
-            println(recipes.values.toString())
+            println(recipes[idToUpdate].toString())
 
             println("Which detail would you like to update for this recipe? ")
             println("1. Name")
@@ -267,7 +267,20 @@ class RecipeManager {
                     updateRecipe(idToUpdate,7,newCuisine.name)
                 }
 
+                8 -> {
+                    val newDifficulty = ConsolePrompter.promptEnum<Difficulty>("Enter new difficulty: ")
+                    updateRecipe(idToUpdate,8,newDifficulty.name)
+                }
+
+                else -> {
+                    println("Invalid number. Please choose between 1 to 8!")
+                    return
+                }
             }
+
+            println("Recipe updated successfully!") // Add confirmation
+        } else {
+            println("Recipe with ID $idToUpdate not found.")
         }
     }
 
