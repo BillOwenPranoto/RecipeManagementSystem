@@ -14,12 +14,16 @@ class RecipeManager {
     var nextIngredientId = 1
 
     fun addRecipe(recipe: Recipe) {
-        if (recipe !in recipes.values) {
-            recipes.put(this.getRecipeNextId(), recipe)
+        val existingRecipe = recipes.values.find { it.name.equals(recipe.name, ignoreCase = true) }
+
+        if (existingRecipe == null) {
+            val newId = nextRecipeId
+            val recipeWithNewId = recipe.copy(id = newId)
+            recipes[newId] = recipeWithNewId
             nextRecipeId++
+            println("Recipe '${recipe.name}' added successfully!")
         } else {
-            println("Recipe already exists!")
-            return
+            println("Recipe with name '${recipe.name}' already exists!")
         }
     }
 
@@ -62,11 +66,6 @@ class RecipeManager {
 
     fun getRecipeCount(): Int =
         recipes.size
-
-
-    fun getRecipeNextId(): Int =
-        nextRecipeId
-
 
     fun getAllRecipes(): List<Recipe> =
         recipes.values.toList()
