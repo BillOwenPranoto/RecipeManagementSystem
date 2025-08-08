@@ -6,11 +6,11 @@ import utilities.UnitConverter
 data class ShoppingItem(val ingredient: Ingredient, var totalAmount: Double, var unit: MeasurementUnit) {
 
 
-    fun getDisplayString() : String {
+    override fun toString() : String {
         val sb = StringBuilder()
 
-        sb.append("\nIngredient: $ingredient\n")
-        sb.append("Amount: $totalAmount $unit\n")
+        sb.appendLine("Ingredient: $ingredient")
+        sb.appendLine("Amount: $totalAmount $unit")
 
         return sb.toString()
     }
