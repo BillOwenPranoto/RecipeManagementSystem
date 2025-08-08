@@ -17,7 +17,7 @@ data class ShoppingList(val items: MutableList<ShoppingItem> = mutableListOf(),
     fun addItem(item: ShoppingItem) {
         if (items.contains(item)) {
             val index = items.indexOf(item)
-            items[index].combine(item)
+            items[index] = items[index].combine(item)
         }
 
         else {

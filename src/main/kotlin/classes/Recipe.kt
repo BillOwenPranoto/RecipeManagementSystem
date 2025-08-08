@@ -102,7 +102,7 @@ data class Recipe(var id: Int, var name: String,
 
      fun setCookingTime(time: String) {
          val castToInt = time.toIntOrNull() ?: return
-         if (isValidPrepTime(castToInt)) {
+         if (isValidCookingTime(castToInt)) {
              this.cookTimeMinutes = castToInt
          } else {
              println("Invalid cooking time, must be less than a day! (1440 minutes)")
@@ -172,7 +172,7 @@ data class Recipe(var id: Int, var name: String,
 
     fun isValidRating(rating: Int?): Boolean {
         if (rating != null) {
-            if (rating > 0 && rating < 10) {
+            if (rating >= 0 && rating <= 10) {
                 return true
             }
         }
