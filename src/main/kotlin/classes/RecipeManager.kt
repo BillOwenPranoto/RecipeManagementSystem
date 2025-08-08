@@ -23,14 +23,14 @@ class RecipeManager {
         }
     }
 
-    fun updateRecipe(id: Int, updated: Recipe) {
-        if (recipes.contains(id)) {
-            recipes.replace(id, updated)
-        } else {
-            println("No recipe with this id! Please double check")
-            return
-        }
-    }
+//    fun updateRecipe(id: Int, updated: Recipe) {
+//        if (recipes.contains(id)) {
+//            recipes.replace(id, updated)
+//        } else {
+//            println("No recipe with this id! Please double check")
+//            return
+//        }
+//    }
 
     fun updateRecipe(id: Int, field: Int, updatedValue: String) {
         val recipe = recipes[id] ?: return
@@ -44,6 +44,10 @@ class RecipeManager {
             6 -> recipe.setRating(updatedValue)
             7 -> recipe.cuisine = Cuisine.valueOf(updatedValue)
             8 -> recipe.difficulty = Difficulty.valueOf(updatedValue)
+            else -> {
+                println("Invalid details. Please reenter!")
+                return
+            }
         }
     }
 
@@ -55,10 +59,6 @@ class RecipeManager {
             return
         }
     }
-
-    fun getRecipe(id: Int): Recipe =
-        recipes[id] ?: throw NoSuchElementException("No recipe with ID $id")
-
 
     fun getRecipeCount(): Int =
         recipes.size
@@ -89,14 +89,11 @@ class RecipeManager {
     fun filterRecipeByDifficulty(difficulty: String): List<Recipe> =
         recipes.values.filter { it.difficulty.displayName().equals(difficulty, ignoreCase = true) }.toList()
 
-
     fun filterRecipeByCuisine(cuisine: String): List<Recipe> =
         recipes.values.filter { it.cuisine.displayName().equals(cuisine, ignoreCase = true) }.toList()
 
-
     fun filterRecipeByRating(rating: String): List<Recipe> =
         recipes.values.filter { it.rating == rating.toInt() }.toList()
-
 
     fun addIngredient(ingredient: Ingredient) {
         ingredients.put(this.nextIngredientId, ingredient)
@@ -286,8 +283,10 @@ class RecipeManager {
 
     fun handleViewCurrentRecipes() {
 
-        recipes.entries.forEach { (id, recipe) ->
-            println("ID $id → ${recipe.name}")
+        println("There are ${getRecipeCount()} right now. Here's a list of them:")
+
+        getAllRecipes().forEachIndexed { index, recipe ->
+            println("${index + 1}. ${recipe.name} (ID: ${recipe.id})")
         }
     }
 
