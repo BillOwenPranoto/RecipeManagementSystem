@@ -24,7 +24,8 @@ object UnitConverter {
             MeasurementUnit.LITERS to 1000.0,
             MeasurementUnit.CUPS to 240.0,
             MeasurementUnit.TABLESPOONS to 15.0,
-            MeasurementUnit.TEASPOONS to 5.0
+            MeasurementUnit.TEASPOONS to 5.0,
+            MeasurementUnit.PIECES to 1.0
         )
 
         val fromFactor = conversionToBase[fromUnit]
