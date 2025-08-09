@@ -26,7 +26,7 @@ data class ShoppingList(val items: MutableList<ShoppingItem> = mutableListOf(),
     }
 
     fun removeItemAt(index: Int) {
-        if (index > items.size || index < 0) {
+        if (index >= items.size || index < 0) {
             println("Shopping list doesn't have that specific item anymore!")
             return
         }
