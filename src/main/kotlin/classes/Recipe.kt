@@ -135,39 +135,21 @@ data class Recipe(var id: Int, var name: String,
     }
 
     fun isVegetarianFriendly(): Boolean {
-        val nonVegetarianCategories = setOf(
-            IngredientCategory.MEAT,
-            IngredientCategory.POULTRY,
-            IngredientCategory.SEAFOOD,
-            IngredientCategory.ANIMAL_FAT
-        )
-
         for (recipe : RecipeIngredient in _ingredients) {
-            if (recipe.ingredient.category in nonVegetarianCategories) {
-                return false
-            }
+           if (!recipe.ingredient.isVegetarianFriendly()) {
+               return false
+           }
         }
-
         return true
     }
 
     fun isVeganFriendly(): Boolean {
-        val nonVeganCategories = setOf(
-            IngredientCategory.MEAT,
-            IngredientCategory.POULTRY,
-            IngredientCategory.SEAFOOD,
-            IngredientCategory.DAIRY,
-            IngredientCategory.EGGS,
-            IngredientCategory.ANIMAL_FAT
-        )
-
         for (recipe : RecipeIngredient in _ingredients) {
-            if(recipe.ingredient.category in nonVeganCategories) {
-                return false;
+            if(!recipe.ingredient.isVeganFriendly()) {
+                return false
             }
         }
-
-        return true;
+        return true
     }
 
     fun isValidRating(rating: Int?): Boolean {
