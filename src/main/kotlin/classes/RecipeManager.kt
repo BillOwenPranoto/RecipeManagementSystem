@@ -170,7 +170,6 @@ class RecipeManager {
         val cookTime = ConsolePrompter.promptInt("And how long will it take in minutes to cook?: ")
         val rating = ConsolePrompter.promptOptionalInt("Lastly, how would you rate this recipe out of 10?: ")
 
-
         print("\nLet's fill in the ingredients. First, let us know how many ingredients needed for this recipe: " )
         val numOfIngredient = readLine()?.toIntOrNull()
 
@@ -199,11 +198,17 @@ class RecipeManager {
            }
             val recipe = Recipe(nextRecipeId, name, description,servings,prepTime,cookTime,rating,difficulty,
                 cuisine,notes, currentRecipeIngredients)
+
             this.addRecipe(recipe)
 
-            println("Recipe $name has been successfully created!")
-        }
+            if (recipe.isVeganFriendly()) {
+                recipe.addTag("Vegan Friendly")
+            }
 
+            if (recipe.isVegetarianFriendly()) {
+                recipe.addTag("Vegetarian Friendly")
+            }
+        }
     }
 
     fun handleUpdateRecipe() {
